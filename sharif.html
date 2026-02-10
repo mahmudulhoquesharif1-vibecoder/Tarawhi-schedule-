@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>তারাবিহ রুটিন ২০২৬ | ডার্ক এস্থেটিক</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            /* ব্ল্যাক ও ডিপ ব্লু এর গভীর শেড */
+            background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
+            font-family: 'Hind Siliguri', sans-serif; 
+            margin: 0; overflow-x: hidden;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* স্নোফল লেয়ার */
+        .snow-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 50;
+        }
+
+        .flake {
+            position: absolute; background: white; border-radius: 50%;
+            opacity: 0.8; box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translateY(-10vh) translateX(0) scale(0.5); }
+            100% { transform: translateY(110vh) translateX(25px) scale(1.2); }
+        }
+
+        /* গ্লাসিমরফিজম বোর্ড */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+            padding: 1.5rem; position: relative; z-index: 10;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            color: white; outline: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-box:focus { 
+            border-color: #3b82f6; 
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* হোয়াইট-গ্লোয়িং রড ব্যারিয়ার */
+        .glow-rod { position: relative; padding: 0 15px; }
+        .glow-rod::after {
+            content: ""; position: absolute; right: 0; top: 35%;
+            height: 30%; width: 1px; background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        /* হাইলাইট আজকের দিন */
+        .today-highlight {
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <div class="snow-layer" id="snowContainer"></div>
+
+    <div class="max-w-4xl mx-auto relative">
+        <header class="text-center mb-10 pt-4">
+            <h1 class="text-4xl md:text-6xl font-bold mb-3 tracking-tight text-white">
+                পবিত্র মাহে রমজান ২০২৬
+            </h1>
+            <h2 class="text-xl md:text-2xl font-light text-blue-400 tracking-[0.3em] uppercase">
+                খতমে তারাবি রুটিন
+            </h2>
+            <div class="mt-6 flex justify-center items-center gap-4 opacity-60">
+                <div class="h-[1px] w-16 bg-gradient-to-r from-transparent to-blue-500"></div>
+                <p class="text-lg font-medium text-gray-300">হাফেজ শারীফ ও সাইফুল</p>
+                <div class="h-[1px] w-16 bg-gradient-to-l from-transparent to-blue-500"></div>
+            </div>
+        </header>
+
+        <div class="mb-12 flex justify-center">
+            <input type="number" id="searchInput" onkeyup="searchFunction()" 
+                   placeholder="Jump to your desired day" 
+                   class="search-box p-4 w-full max-w-sm text-center text-xl font-light">
+        </div>
+
+        <div class="glass-card">
+            <div class="overflow-x-auto">
+                <table class="w-full text-center">
+                    <thead>
+                        <tr class="text-blue-300 font-bold text-sm md:text-lg border-b border-white/10">
+                            <th class="pb-6 glow-rod">তারাবিহ</th>
+                            <th class="pb-6 glow-rod">হাফেজ শারীফ</th>
+                            <th class="pb-6">হাফেজ সাইফুল</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableData" class="text-gray-300">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tableData = document.getElementById('tableData');
+        let currentPara = 1, currentPage = 1;
+
+        for (let day = 1; day <= 27; day++) {
+            let limit = (day <= 6) ? 15 : 10;
+            function calc(pages) {
+                let sP = currentPara, sPg = currentPage, eP, ePg;
+                let rem = 21 - sPg;
+                if (pages <= rem) { eP = sP; ePg = sPg + pages - 1; }
+                else { eP = sP + 1; ePg = pages - rem; }
+                currentPara = (ePg === 20) ? eP + 1 : eP;
+                currentPage = (ePg === 20) ? 1 : ePg + 1;
+                return `পারা ${sP}(${sPg}) - ${eP}(${ePg})`;
+            }
+
+            let sData = calc(limit);
+            let saiData = calc(limit);
+
+            tableData.innerHTML += `
+                <tr class="border-b border-white/5 transition-all duration-300">
+                    <td class="py-5 font-bold text-2xl glow-rod text-white">${day}</td>
+                    <td class="py-5 text-sm md:text-base glow-rod">${sData}</td>
+                    <td class="py-5 text-sm md:text-base">${saiData}</td>
+                </tr>`;
+        }
+
+        // এস্থেটিক স্নোফল জেনারেশন
+        const snowContainer = document.getElementById('snowContainer');
+        const flakeCount = 80; 
+
+        for (let i = 0; i < flakeCount; i++) {
+            const flake = document.createElement('div');
+            flake.className = 'flake';
+            const size = Math.random() * 2 + 0.5 + 'px';
+            flake.style.width = size;
+            flake.style.height = size;
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.animationDuration = Math.random() * 8 + 6 + 's';
+            flake.style.animationDelay = Math.random() * 5 + 's';
+            flake.style.opacity = Math.random() * 0.7 + 0.3;
+            snowContainer.appendChild(flake);
+        }
+
+        // সার্চ ফাংশন
+        function searchFunction() {
+            let input = document.getElementById("searchInput").value;
+            let rows = tableData.getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                let val = rows[i].getElementsByTagName("td")[0].innerText.trim();
+                rows[i].style.display = (val === input || input === "") ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
